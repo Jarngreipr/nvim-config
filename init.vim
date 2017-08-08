@@ -1,0 +1,125 @@
+filetype plugin indent on
+syntax enable
+set background=dark
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+" Plugins
+call plug#begin()
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-vinegar'
+
+Plug 'ctrlpvim/ctrlp.vim', {'on': ['CtrlP', 'CtrlPMixed', 'CtrlPMRU']}
+
+Plug 'altercation/vim-colors-solarized'
+
+" Snippets
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
+" Statusline
+Plug 'itchyny/lightline.vim'
+
+" Rust
+Plug 'rust-lang/rust.vim'
+Plug 'vim-syntastic/syntastic'
+
+" VimWiki
+Plug 'vimwiki/vimwiki'
+
+" vimtex
+Plug 'lervag/vimtex'
+call plug#end()
+
+" Keymaps
+let mapleader="æ"
+let maplocalleader="ð"
+
+inoremap jk <Esc>
+noremap <Esc> <Esc>
+nmap <leader>ev :e ~/.config/nvim/init.vim<cr>
+cmap w!! w !sudo tee > /dev/null %
+
+map <leader>so :w<cr>:so %<cr>
+
+nnoremap <silent> <C-f> :CtrlP<cr>
+
+" Lightline configurations
+set noshowmode
+let g:lightline = {
+	\ 'colorscheme': 'solarized',
+	\ 'active':{
+	\  'left': [ ['mode', 'paste' ],
+	\	     ['gitbranch', 'readonly', 'filename', 'modified' ] ]
+	\ },
+	\ 'component_functions': {
+	\   'gitbranch': 'fugitive#head'
+	\ },
+	\}
+
+colorscheme solarized
+
+" Window movement
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+" Tab mappings
+map <leader>tn :tabnew<cr>
+map <leader>to :tabonly<cr>
+map <leader>tc :tabclose<cr>
+map <leader>tm :tabmove<cr>
+map <leader>tN :tabNext<cr>
+map <leader>tp :tabprevious<cr>
+
+" Search
+nnoremap þ /
+nnoremap <C-þ> ?
+map <silent> <leader><cr> :noh<cr>
+
+" Ultisnips trigger configs
+let g:UltisnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+" VimTEX configs
+let g:vimtex_view_method = 'zathura'
+autocmd BufReadPre *.tex let b:vimtex_main = 'master.tex'
+
+
+set noswapfile
+
+" Fix movement in linewraps
+noremap <silent> <Leader>w :call ToggleWrap()<CR>
+function ToggleWrap()
+  if &wrap
+    echo "Wrap OFF"
+    setlocal nowrap
+    set virtualedit=all
+    silent! nunmap <buffer> <Up>
+    silent! nunmap <buffer> <Down>
+    silent! nunmap <buffer> <Home>
+    silent! nunmap <buffer> <End>
+    silent! iunmap <buffer> <Up>
+    silent! iunmap <buffer> <Down>
+    silent! iunmap <buffer> <Home>
+    silent! iunmap <buffer> <End>
+  else
+    echo "Wrap ON"
+    setlocal wrap linebreak nolist
+    set virtualedit=
+    setlocal display+=lastline
+    noremap  <buffer> <silent> <Up>   gk
+    noremap  <buffer> <silent> <Down> gj
+    noremap  <buffer> <silent> <Home> g<Home>
+    noremap  <buffer> <silent> <End>  g<End>
+    inoremap <buffer> <silent> <Up>   <C-o>gk
+    inoremap <buffer> <silent> <Down> <C-o>gj
+    inoremap <buffer> <silent> <Home> <C-o>g<Home>
+    inoremap <buffer> <silent> <End>  <C-o>g<End>
+  endif
+endfunction
