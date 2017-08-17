@@ -69,6 +69,10 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
+" Disable scrolling
+inoremap <ScrollWheelUp> <Nop> 
+inoremap <ScrollWheelDown> <Nop> 
+
 " Tab mappings
 map <leader>tn :tabnew<cr>
 map <leader>to :tabonly<cr>
